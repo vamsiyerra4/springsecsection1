@@ -24,11 +24,13 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) //only HTTP
+        http.sessionManagement(sessionMangementConfig ->
+                        sessionMangementConfig.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
+                .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) //only HTTP
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/myAccount","/myBalance","/myLoans","myCards").authenticated()
-                .requestMatchers("/notices","/contact","/error","/register").permitAll());
+                .requestMatchers("/notices","/contact","/error","/register","invalidSession").permitAll());
         http.formLogin(withDefaults());
 //        http.httpBasic(withDefaults());
         http.httpBasic(httpbasicconfig -> httpbasicconfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));

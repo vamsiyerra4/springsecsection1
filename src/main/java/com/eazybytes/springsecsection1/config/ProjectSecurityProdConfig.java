@@ -20,11 +20,13 @@ public class ProjectSecurityProdConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.redirectToHttps(withDefaults()) // HTTPS
+        http.sessionManagement(sessionMangementConfig ->
+                        sessionMangementConfig.invalidSessionUrl("/invalidSession").maximumSessions(1).maxSessionsPreventsLogin(true))
+                .redirectToHttps(withDefaults()) // HTTPS
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/myAccount","/myBalance","/myLoans","myCards").authenticated()
-                .requestMatchers("/notices","/contact","/error","/register").permitAll());
+                .requestMatchers("/notices","/contact","/error","/register","/invalidSession").permitAll());
         http.formLogin(withDefaults());
         http.httpBasic(httpbasicconfig ->
                 httpbasicconfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
