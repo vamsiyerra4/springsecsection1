@@ -1,5 +1,6 @@
 package com.eazybytes.springsecsection1.config;
 
+import com.eazybytes.springsecsection1.exceptionHandling.CustomAccessDeniedHandler;
 import com.eazybytes.springsecsection1.exceptionHandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ public class ProjectSecurityProdConfig {
                 httpbasicconfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
 //        http.exceptionHandling(exceptionhandlerConfig ->
 //                exceptionhandlerConfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())); //For global authentication entry
+        http.exceptionHandling(exceptionHandlerConfig -> exceptionHandlerConfig.accessDeniedHandler(new CustomAccessDeniedHandler()));
         return http.build();
     }
 
