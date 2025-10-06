@@ -26,6 +26,9 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(sessionMangementConfig ->
                         sessionMangementConfig.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
+//                .sessionManagement(sessionMangementConfig ->
+//                sessionMangementConfig.sessionFixation(sessionFixationConfigurer ->
+//                                sessionFixationConfigurer.newSession())) //TO change the default session fixation strategey
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) //only HTTP
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
