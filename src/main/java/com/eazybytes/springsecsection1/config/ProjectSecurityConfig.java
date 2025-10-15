@@ -67,7 +67,11 @@ public class ProjectSecurityConfig {
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) //only HTTP
 //                .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/myAccount","/myBalance","/myLoans","myCards","/user").authenticated()
+                        .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNTS")
+                        .requestMatchers("/myBalance").hasAuthority("VIEWBALANCE")
+                        .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
+                        .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                        .requestMatchers("/user").authenticated()
                 .requestMatchers("/notices","/contact","/error","/register","invalidSession").permitAll());
         http.formLogin(withDefaults());
 //        http.httpBasic(withDefaults());
